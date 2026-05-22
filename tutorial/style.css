@@ -2337,24 +2337,33 @@ code.long-code .hljs-ln td.hljs-ln-code {
   align-items: baseline;
 }
 
+/* Інлайн-контейнер для авторозширення (Grid Trick) */
+.inline-sizer {
+  display: inline-grid;
+  vertical-align: middle; /* Змінено з baseline на middle для кращого вирівнювання */
+  align-items: center;
+  line-height: 1; /* Фіксуємо висоту рядка */
+}
+
 .inline-sizer::after,
 .inline-sizer input {
   grid-area: 1 / 1;
-  font-family: inherit; /* Успадковує моноширинний шрифт від <pre> */
+  font-family: inherit;
   font-size: inherit;
-  padding: 0 2px;
+  padding: 0 4px; /* Трохи збільшили горизонтальний padding */
   margin: 0;
+  box-sizing: content-box; /* Важливо для того, щоб padding не обрізав інпут */
 }
 
 .inline-sizer::after {
   content: attr(data-value) " ";
   visibility: hidden;
   white-space: pre;
-  min-width: 4ch; /* Мінімальна ширина інпута */
+  min-width: 2ch; /* Трохи зменшили мінімальну ширину */
 }
 
 .inline-sizer input {
-  line-height: 1.5;
+  line-height: 1.5; /* Повертаємо для читабельності тексту */
   width: 100%;
   border: none;
   border-bottom: 2px dashed var(--accent);
@@ -2365,6 +2374,7 @@ code.long-code .hljs-ln td.hljs-ln-code {
   transition:
     border-color 0.3s ease,
     color 0.3s ease;
+  min-height: 1.2em; /* Додаємо мінімальну висоту, щоб не обрізало верхівку */
 }
 
 .inline-sizer input:focus {
