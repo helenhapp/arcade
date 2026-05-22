@@ -8,22 +8,24 @@ ctx.textAlign = "center";
 ctx.textBaseline = "middle";
 
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
-// ⚙️ ПАНЕЛЬ НАЛАШТУВАНЬ ГРИ
+// ПАНЕЛЬ НАЛАШТУВАНЬ ГРИ
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
 
 const SETTINGS = {
-  ufoSpeed: 4, // Швидкість НЛО
-  ufoSize: 45, // Розмір НЛО
+  ufoSpeed: 6, // Швидкість НЛО
+  ufoSize: 55, // Розмір НЛО
+
   starSpeed: 10, // Швидкість зірочки
-  starSize: 25, // Розмір зірочки
+  starSize: 50, // Розмір зірочки
   shootWaitTime: 250, // Затримка між пострілами (менше = швидше)
-  alienSpeed: 2.6, // Швидкість прибульців
+
+  alienSpeed: 2, // Швидкість прибульців
   alienSize: 35, // Розмір прибульців
-  alienWaitTime: 1100, // Як часто з'являються вороги
-  maxAliens: 10, // Максимум ворогів на екрані
+  alienWaitTime: 1200, // Як часто з'являються вороги
+  maxAliens: 5, // Максимум ворогів на екрані
 };
 
-// --- Базовий стан гри ---
+// Базовий стан гри
 let score = 0;
 let gameOver = false;
 let isStarted = false;
@@ -36,10 +38,10 @@ const aliens = [];
 let ufo;
 
 const keys = {
-  w: false,
-  a: false,
-  s: false,
-  d: false,
+  KeyW: false,
+  KeyA: false,
+  KeyS: false,
+  KeyD: false,
   ArrowUp: false,
   ArrowDown: false,
   ArrowLeft: false,
@@ -50,14 +52,15 @@ const keys = {
 // КЛАСИ (Об'єкти гри)
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
 
+// 🌌 Ufo
 class Ufo {
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.size = SETTINGS.ufoSize;
     this.speed = SETTINGS.ufoSpeed;
-    this.hitArea = this.size * 0.6; // Зона влучання - це 60% від розміру
-    this.emoji = "🛸";
+    this.hitArea = this.size * 0.6;
+    this.emoji = "🐒";
   }
 
   draw(ctx) {
@@ -71,13 +74,14 @@ class Ufo {
     const canMoveLeft = this.x > this.size / 2;
     const canMoveRight = this.x < canvasWidth - this.size / 2;
 
-    if (keys.w && canMoveUp) this.y -= this.speed;
-    if (keys.s && canMoveDown) this.y += this.speed;
-    if (keys.a && canMoveLeft) this.x -= this.speed;
-    if (keys.d && canMoveRight) this.x += this.speed;
+    if (keys.KeyW && canMoveUp) this.y -= this.speed;
+    if (keys.KeyS && canMoveDown) this.y += this.speed;
+    if (keys.KeyA && canMoveLeft) this.x -= this.speed;
+    if (keys.KeyD && canMoveRight) this.x += this.speed;
   }
 }
 
+// 🌌 Star
 class Star {
   constructor(x, y, vx, vy) {
     this.x = x;
@@ -85,10 +89,9 @@ class Star {
     this.vx = vx;
     this.vy = vy;
     this.size = SETTINGS.starSize;
-    this.emoji = "⭐️";
+    this.emoji = "🍌";
   }
 
-  // Звичайна куля просто летить прямо
   move() {
     this.x += this.vx;
     this.y += this.vy;
@@ -102,25 +105,25 @@ class Star {
   isOut = (w, h) => this.x < 0 || this.x > w || this.y < 0 || this.y > h;
 }
 
+// 🌌 Alien
 class Alien {
   constructor(x, y) {
     this.x = x;
     this.y = y;
     this.speed = SETTINGS.alienSpeed;
     this.size = SETTINGS.alienSize;
-    this.emoji = "👾";
-  }
-
-  // Прибулець завжди летить до цілі (до НЛО)
-  move(target) {
-    const angle = Math.atan2(target.y - this.y, target.x - this.x);
-    this.x += Math.cos(angle) * this.speed;
-    this.y += Math.sin(angle) * this.speed;
+    this.emoji = "🐊";
   }
 
   draw(ctx) {
     ctx.font = this.size + "px Arial";
     ctx.fillText(this.emoji, this.x, this.y);
+  }
+
+  move(target) {
+    const angle = Math.atan2(target.y - this.y, target.x - this.x);
+    this.x += Math.cos(angle) * this.speed;
+    this.y += Math.sin(angle) * this.speed;
   }
 }
 
@@ -133,13 +136,13 @@ function startGame() {
   gameOver = false;
   isStarted = true;
 
-  ufo = new Ufo(width / 2, height / 2);
-
   stars.length = 0;
   aliens.length = 0;
 
   lastAlienTime = Date.now();
   lastShootTime = 0;
+
+  ufo = new Ufo(width / 2, height / 2);
 }
 
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
@@ -154,40 +157,37 @@ function drawScore() {
   ctx.fillText("Рахунок: " + score, 20, 40);
   ctx.restore();
 }
-
+ 
 function drawMenu() {
   ctx.fillStyle = "rgba(11, 12, 16, 0.8)";
   ctx.fillRect(0, 0, width, height);
-
   ctx.fillStyle = "#66fcf1";
   ctx.font = "bold 50px Arial";
-  ctx.fillText("Космічна Арена", width / 2, height / 2 - 40);
-
+  ctx.fillText("Jungle Arcade 🌴", width / 2, height / 2 - 40);
   ctx.fillStyle = "#c5c6c7";
   ctx.font = "20px Arial";
   ctx.fillText("Натисни ПРОБІЛ, щоб почати", width / 2, height / 2 + 30);
   ctx.fillText("WASD - рух, СТРІЛКИ - стрільба", width / 2, height / 2 + 70);
 }
-
+ 
 function drawEnd() {
   ctx.fillStyle = "rgba(11, 12, 16, 0.8)";
   ctx.fillRect(0, 0, width, height);
-
   ctx.fillStyle = "#66fcf1";
   ctx.font = "bold 50px Arial";
   ctx.fillText("Кінець гри!", width / 2, height / 2 - 40);
   ctx.font = "30px Arial";
   ctx.fillText(`Твій рахунок: ${score}`, width / 2, height / 2 + 10);
-
   ctx.fillStyle = "#c5c6c7";
   ctx.font = "20px Arial";
-  ctx.fillText("Натисни ПРОБІЛ, щоб грати ще", width / 2, height / 2 + 60);
+  ctx.fillText("Натисни ПРОБІЛ, щоб грати знову", width / 2, height / 2 + 60);
 }
 
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
 // ФУНКЦІЇ ІГРОВОЇ ЛОГІКИ
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
 
+// 🌌 shootStars
 function shootStars(now) {
   const canShoot = now - lastShootTime > SETTINGS.shootWaitTime;
 
@@ -211,6 +211,7 @@ function shootStars(now) {
   }
 }
 
+// 🌌 makeAlien
 function makeAlien(now) {
   const isTime = now - lastAlienTime > SETTINGS.alienWaitTime;
 
@@ -231,12 +232,13 @@ function makeAlien(now) {
   }
 }
 
-// "Чи відбулося влучання?"
+// 🌌 isHit
 function isHit(obj1, obj2) {
   const distance = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y);
   return distance < obj1.size / 2 + obj2.size / 2;
 }
 
+// 🌌 updateAll
 function updateAll() {
   for (let i = stars.length - 1; i >= 0; i--) {
     let star = stars[i];
@@ -249,7 +251,6 @@ function updateAll() {
     let alien = aliens[i];
     alien.move(ufo);
 
-    // Створюємо зону для перевірки, чи зловили НЛО
     const ufoHitArea = { x: ufo.x, y: ufo.y, size: ufo.hitArea };
     if (isHit(ufoHitArea, alien)) {
       gameOver = true;
@@ -274,14 +275,7 @@ function updateAll() {
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
 
 window.addEventListener("keydown", (e) => {
-  const key = e.key.toLowerCase();
-  if (key === "w") keys.w = true;
-  if (key === "a") keys.a = true;
-  if (key === "s") keys.s = true;
-  if (key === "d") keys.d = true;
-
-  if (keys.hasOwnProperty(e.key)) keys[e.key] = true;
-
+  if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
   if (e.code === "Space") {
     if (!isStarted || gameOver) startGame();
     e.preventDefault();
@@ -289,13 +283,7 @@ window.addEventListener("keydown", (e) => {
 });
 
 window.addEventListener("keyup", (e) => {
-  const key = e.key.toLowerCase();
-  if (key === "w") keys.w = false;
-  if (key === "a") keys.a = false;
-  if (key === "s") keys.s = false;
-  if (key === "d") keys.d = false;
-
-  if (keys.hasOwnProperty(e.key)) keys[e.key] = false;
+  if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
 });
 
 // ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
@@ -305,28 +293,31 @@ window.addEventListener("keyup", (e) => {
 function play() {
   requestAnimationFrame(play);
   ctx.clearRect(0, 0, width, height);
-
+ 
   if (!isStarted) {
     drawMenu();
     return;
   }
-
+ 
   if (gameOver) {
     drawEnd();
     return;
   }
-
+ 
   const now = Date.now();
-
+ 
   ufo.move(keys, width, height);
   shootStars(now);
   makeAlien(now);
   updateAll();
-
+ 
   ufo.draw(ctx);
   stars.forEach((star) => star.draw(ctx));
   aliens.forEach((alien) => alien.draw(ctx));
   drawScore();
 }
 
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// Запускаємо гру!
+// startGame();
 play(); // Запускаємо гру!

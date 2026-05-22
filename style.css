@@ -1,7 +1,7 @@
 body {
   margin: 0;
   overflow: hidden;
-  background-color: #0b0c10;
+  background-color: #eef9cd;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -9,10 +9,10 @@ body {
 }
 
 canvas {
-  background-color: #1f2833;
-  border: 4px solid #45a29e;
+  background-color: #254331;
+  border: 4px solid #a27a45;
   border-radius: 8px;
-  box-shadow: 0 0 40px rgba(69, 162, 158, 0.4);
+  box-shadow: 0 0 20px rgba(69, 162, 158, 0.4);
   max-width: 95vw;
   max-height: 95vh;
   aspect-ratio: 4 / 3;

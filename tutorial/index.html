@@ -1,0 +1,1471 @@
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Матеріали для заняття з веб-розробки" />
+
+    <!-- ❗️ Назва на вкладці -->
+    <title>Space Arcade Tutorial</title>
+
+    <!-- ❗️ Фавіконка (зараз немає) -->
+    <link rel="icon" href="" />
+
+    <!-- Скрипт перемикання теми -->
+    <link
+      id="hljs-light"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github.min.css"
+    />
+    <link
+      id="hljs-dark"
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css"
+    />
+
+    <script>
+      const savedTheme = localStorage.getItem("wu_theme") || "light";
+      document.documentElement.setAttribute("data-theme", savedTheme);
+
+      // Вимикаємо непотрібну тему одразу, щоб не було блимання при завантаженні
+      if (savedTheme === "dark") {
+        document.getElementById("hljs-light").disabled = true;
+      } else {
+        document.getElementById("hljs-dark").disabled = true;
+      }
+    </script>
+
+    <!-- Підключення шрифтів (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Cousine:ital,wght@0,400;0,700;1,400;1,700&family=Nunito:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500&family=Press+Start+2P&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Unbounded:wght@200..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Підсвітка коду (Highlight.js) -->
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/highlightjs-line-numbers.js/2.8.0/highlightjs-line-numbers.min.js"
+    ></script>
+
+    <!-- CodeMirror -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
+    />
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.js"
+    ></script>
+
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/javascript/javascript.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/xml/xml.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/css/css.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/htmlmixed/htmlmixed.min.js"
+    ></script>
+
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
+    />
+
+    <!-- Власні стилі та скрипти -->
+    <link rel="stylesheet" href="./style.css?v=11.5" />
+    <script defer src="./script.js?v=11.5"></script>
+
+    <style>
+      p code,
+      li code {
+        display: inline;
+        color: var(--accent-pop);
+        margin: 0;
+        padding: 2px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- "Завіса", яка плавно зникає при завантаженні сторінки -->
+    <div class="transition-curtain"></div>
+
+    <!-- Панель з навігацією -->
+    <script>
+      window.pageNavLinks = [
+        {
+          name: "Навігатор",
+          url: "#",
+        },
+        {
+          name: "Редактор",
+          url: "https://editor.webuniverseua.com",
+          newTab: true,
+        },
+      ];
+    </script>
+    <div id="nav-container"></div>
+
+    <!-- Хедер з назвою теми та посиланнями -->
+    <header>
+      <div class="title-container">
+        <!-- <a href="#" class="nav-arrow prev-arrow" title="Попередній урок">←</a> -->
+
+        <h1 id="lesson-title">Туторіал 3</h1>
+
+        <!-- <a href="#" class="nav-arrow next-arrow" title="Наступний урок">→</a> -->
+      </div>
+
+      <p class="topic">Space Arcade</p>
+
+      <hr />
+    </header>
+
+    <!-- Основний контент -->
+    <main>
+      <div class="tabs-nav">
+        <button class="tab-btn active" data-target="part-1">
+          Частина 1: НЛО та Рух
+        </button>
+        <button class="tab-btn" data-target="part-2">
+          Частина 2: Стрільба
+        </button>
+        <button class="tab-btn" data-target="part-3">
+          Частина 3: Прибульці
+        </button>
+        <button class="tab-btn" data-target="part-4">
+          Частина 4: Зіткнення та UI
+        </button>
+      </div>
+
+      <!-- 🧩 ЧАСТИНА 1 -->
+
+      <section id="part-1" class="theory-block tab-content active show">
+        <div class="theory-header">
+          <span class="star">✧</span>
+          <h2>
+            Теорія:
+            <span class="accent">Підготовка та створення героя</span>
+          </h2>
+          <span class="star">✧</span>
+        </div>
+
+        <div class="theory-content">
+          <h3 id="p1-01">Опис гри</h3>
+
+          <p>
+            Сьогодні ми створимо справжню космічну аркаду! Наш головний герой —
+            це НЛО 🛸, яке має захищатися від навали космічних прибульців 👾,
+            стріляючи по них зірками ⭐️.
+          </p>
+
+          <div class="video-wrapper zoomable">
+            <video controls>
+              <source src="./media/game.mov" type="video/mp4" />
+              Ваший браузер не підтримує відео.
+            </video>
+          </div>
+
+          <hr />
+
+          <h3 id="p1-02">Стартовий код</h3>
+
+          <p>
+            Для початку, створіть три файли (<code>index.html</code>,
+            <code>style.css</code>, <code>script.js</code>) та скопіюйте в них
+            цей початковий код.
+          </p>
+
+          <pre><code class="language-html">&lt;!doctype html&gt;
+&lt;html lang="uk"&gt;
+  &lt;head&gt;
+    &lt;meta charset="UTF-8" /&gt;
+    &lt;title&gt;Space Arcade&lt;/title&gt;
+    &lt;link rel="stylesheet" href="style.css" /&gt;
+    &lt;script src="script.js" defer&gt;&lt;/script&gt;
+  &lt;/head&gt;
+  &lt;body&gt;
+    &lt;canvas id="gameCanvas" width="800" height="600"&gt;&lt;/canvas&gt;
+  &lt;/body&gt;
+&lt;/html&gt;</code></pre>
+
+          <pre><code class="language-css">body {
+  margin: 0;
+  overflow: hidden;
+  background-color: #0b0c10;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+canvas {
+  background-color: #1f2833;
+  border: 4px solid #45a29e;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(69, 162, 158, 0.4);
+  max-width: 95vw;
+  max-height: 95vh;
+  aspect-ratio: 4 / 3;
+  object-fit: contain;
+}</code></pre>
+
+          <pre><code class="language-javascript">const canvas = document.getElementById("gameCanvas");
+const ctx = canvas.getContext("2d");
+
+const width = canvas.width;
+const height = canvas.height;
+
+ctx.textAlign = "center";
+ctx.textBaseline = "middle";
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// ПАНЕЛЬ НАЛАШТУВАНЬ ГРИ
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+const SETTINGS = {
+  ufoSpeed: 4,         // Швидкість НЛО
+  ufoSize: 45,         // Розмір НЛО
+  starSpeed: 10,       // Швидкість зірочки
+  starSize: 25,        // Розмір зірочки
+  shootWaitTime: 250,  // Затримка між пострілами (менше = швидше)
+  alienSpeed: 2.6,     // Швидкість прибульців
+  alienSize: 35,       // Розмір прибульців
+  alienWaitTime: 1100, // Як часто з'являються вороги
+  maxAliens: 10,       // Максимум ворогів на екрані
+};
+
+// Базовий стан гри
+let score = 0;
+let gameOver = false;
+let isStarted = false;
+
+let lastShootTime = 0;
+let lastAlienTime = 0;
+
+const stars = [];
+const aliens = [];
+let ufo;
+
+const keys = {
+  KeyW: false, 
+  KeyA: false, 
+  KeyS: false,
+  KeyD: false,
+  ArrowUp: false, 
+  ArrowDown: false, 
+  ArrowLeft: false, 
+  ArrowRight: false,
+};
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// КЛАСИ (Об'єкти гри)
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+// 🌌 Ufo
+
+// 🌌 Star
+
+// 🌌 Alien
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// ФУНКЦІЇ СТАНУ ГРИ
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+function startGame() {
+  score = 0;
+  gameOver = false;
+  isStarted = true;
+
+  stars.length = 0;
+  aliens.length = 0;
+
+  lastAlienTime = Date.now();
+  lastShootTime = 0;
+}
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// ФУНКЦІЇ МАЛЮВАННЯ (Меню та Інтерфейс)
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+// 🌌 drawScore
+
+// 🌌 drawMenu
+
+// 🌌 drawEnd
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// ФУНКЦІЇ ІГРОВОЇ ЛОГІКИ
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+// 🌌 shootStars
+
+// 🌌 makeAlien
+
+// 🌌 isHit
+
+// 🌌 updateAll
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// КЕРУВАННЯ КЛАВІАТУРОЮ
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+window.addEventListener("keydown", (e) => {
+  if (keys.hasOwnProperty(e.code)) keys[e.code] = true;
+  if (e.code === "Space") {
+    if (!isStarted || gameOver) startGame();
+    e.preventDefault();
+  }
+});
+
+window.addEventListener("keyup", (e) => {
+  if (keys.hasOwnProperty(e.code)) keys[e.code] = false;
+});
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// ГОЛОВНИЙ ЦИКЛ ГРИ (Play)
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+
+function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+  
+  // Поки що тут пусто, згодом додамо малювання!
+}
+
+// ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦ - ✦
+// Запускаємо гру!
+startGame();
+play(); // Запускаємо гру!
+</code></pre>
+
+          <img src="./media/step_00.png" alt="" />
+
+          <hr />
+
+          <h3 id="p1-1">Крок 1: Малюємо НЛО 🛸</h3>
+
+          <p>
+            У програмуванні зручно об'єднувати властивості (координати, розмір)
+            та дії (малювання, рух) в одну структуру — <strong>Клас</strong>.
+            Для створення класів використовується ключове слово
+            <code>class</code>. Давайте створимо клас для нашого героя — НЛО.
+          </p>
+
+          <!-- task 1.1 -->
+          <div class="unlockable-task">
+            <h4>Завдання 1.1: Створення класу</h4>
+
+            <pre><code class="nohighlight nocopy"><span class="blank" data-answer="class"></span> Ufo {
+  // Тут будемо писати код корабля
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">class Ufo {
+  // Тут будемо писати код корабля
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            Коли ми створюємо об'єкт (наприклад, конкретне НЛО), запускається
+            спеціальна функція —
+            <strong>конструктор</strong> (<code>constructor</code>). Слово
+            <code>this</code> (цей) вказує, що ми записуємо властивості саме в
+            ЦЕЙ конкретний корабель.
+          </p>
+
+          <!-- task 1.2 -->
+          <div class="unlockable-task">
+            <h4>Завдання 1.2: Властивості та малювання</h4>
+
+            <pre><code class="nohighlight nocopy"><span class="blank" data-answer="constructor"></span>(x, y) {
+  <span class="blank" data-answer="this"></span>.x = x;
+  <span class="blank" data-answer="this"></span>.y = y;
+  <span class="blank" data-answer="this"></span>.size = SETTINGS.ufoSize;
+  <span class="blank" data-answer="this"></span>.speed = SETTINGS.ufoSpeed;
+  <span class="blank" data-answer="this"></span>.hitArea = this.size * 0.6;
+  <span class="blank" data-answer="this"></span>.emoji = "🛸";
+}
+
+draw() {
+  ctx.font = this.size + "px Arial";
+  ctx.fillText(this.emoji, this.x, this.y);
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">constructor(x, y) {
+  this.x = x;
+  this.y = y;
+  this.size = SETTINGS.ufoSize;
+  this.speed = SETTINGS.ufoSpeed;
+  this.hitArea = this.size * 0.6;
+  this.emoji = "🛸";
+}
+
+draw(ctx) {
+  ctx.font = this.size + "px Arial";
+  ctx.fillText(this.emoji, this.x, this.y);
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            Супер! Клас є. Але це лише креслення. Тепер треба створити сам
+            корабель по центру екрану за допомогою слова <code>new</code> і
+            намалювати його. <br /><br />👉 Знайдіть у своєму коді функцію
+            <code>startGame()</code> і додайте створення НЛО. Потім у функції
+            <code>play()</code> намалюйте його (викличте його метод
+            <code>draw</code>).
+          </p>
+
+          <!-- task 1.3 -->
+          <div class="unlockable-task">
+            <h4>Завдання 1.3: Поява на екрані</h4>
+
+            <pre><code class="nohighlight nocopy">// Додайте це всередину startGame()
+ufo = <span class="blank" data-answer="new"></span> Ufo(width / 2, height / 2);
+
+// Додайте це всередину play()
+if (isStarted) {
+  <span class="blank" data-answer="ufo"></span>.draw(ctx);
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">// У функції startGame():
+ufo = new Ufo(width / 2, height / 2);
+
+// У функції play():
+if (isStarted) {
+  ufo.draw(ctx);
+}</code></pre>
+            </div>
+          </div>
+
+          <img src="./media/step_01.png" alt="" />
+
+          <hr />
+
+          <h3 id="p1-2">Крок 2: Додаємо двигуни (Рух)</h3>
+
+          <p>
+            Наш корабель поки що висить у космосі, як камінь. Додамо йому метод
+            <code>move</code>, щоб він реагував на кнопки <b>WASD</b>.
+          </p>
+
+          <!-- task 1.4 -->
+          <div class="unlockable-task">
+            <h4>Завдання 1.4: Читаємо клавіатуру</h4>
+            <p>Допишіть перевірку клавіш S, A та D у класі Ufo.</p>
+
+            <pre><code class="nohighlight nocopy">// Додайте цей метод всередину класу Ufo, під методом draw(ctx)
+move(keys) {
+  if (keys.KeyW) this.y -= this.speed;
+  if (keys.<span class="blank" data-answer="KeyS"></span>) this.y += this.speed;
+  if (keys.<span class="blank" data-answer="KeyA"></span>) this.x -= this.speed;
+  if (keys.<span class="blank" data-answer="KeyD"></span>) this.x += this.speed;
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">move(keys) {
+  if (keys.KeyW) this.y -= this.speed;
+  if (keys.KeyS) this.y += this.speed;
+  if (keys.KeyA) this.x -= this.speed;
+  if (keys.KeyD) this.x += this.speed;
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            👉 Тепер викличте <code>ufo.move(keys);</code> у функції
+            <code>play()</code> перед малюванням!
+          </p>
+
+          <div class="soft-callout">
+            <h4>🧪 ТЕСТУВАННЯ</h4>
+            <p>
+              Натискайте клавіші <b>WASD</b>, щоб рухати НЛО по полотну.
+              <br /><br />⚠️ <strong>Проблема:</strong> Зараз НЛО може вилетіти
+              за межі полотна!
+            </p>
+          </div>
+
+          <hr />
+
+          <h3 id="p1-3">Крок 3: Ставимо стіни (Межі екрану)</h3>
+
+          <p>
+            Щоб НЛО не втікало, ми маємо перевіряти, чи не торкається воно країв
+            полотна, перед тим як зробити крок.
+          </p>
+
+          <!-- task 1.5 -->
+          <div class="unlockable-task">
+            <h4>Завдання 1.5: Перевірка кордонів</h4>
+            <p>
+              Замініть свій метод <code>move</code> на цей вдосконалений
+              варіант. Що нам потрібно передати в метод, щоб знати розміри
+              полотна?
+            </p>
+
+            <pre><code class="nohighlight nocopy">move(keys, canvasWidth, canvasHeight) {
+  const canMoveUp = this.y &gt; this.size / 2;
+  const canMoveDown = this.y &lt; canvasHeight - this.size / 2;
+  const canMoveLeft = this.x &gt; this.size / 2;
+  const canMoveRight = this.x <&lt;canvasWidth - this.size / 2;
+
+  if (keys.KeyW && canMoveUp) this.y -= this.speed;
+  if (keys.KeyS && <span class="blank" data-answer="canMoveDown"></span>) this.y += this.speed;
+  if (keys.KeyA && <span class="blank" data-answer="canMoveLeft"></span>) this.x -= this.speed;
+  if (keys.KeyD && <span class="blank" data-answer="canMoveRight"></span>) this.x += this.speed;
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">move(keys, canvasWidth, canvasHeight) {
+  const canMoveUp = this.y &gt; this.size / 2;
+  const canMoveDown = this.y &lt; canvasHeight - this.size / 2;
+  const canMoveLeft = this.x &gt; this.size / 2;
+  const canMoveRight = this.x <&lt;canvasWidth - this.size / 2;
+
+  if (keys.KeyW && canMoveUp) this.y -= this.speed;
+  if (keys.KeyS && canMoveDown) this.y += this.speed;
+  if (keys.KeyA && canMoveLeft) this.x -= this.speed;
+  if (keys.KeyD && canMoveRight) this.x += this.speed;
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            👉 Оскільки ми додали нові параметри в метод <code>move</code>, не
+            забудьте оновити його виклик у функції <code>play()</code>:
+            <br /><code>ufo.move(keys, width, height);</code>
+          </p>
+
+          <div class="soft-callout">
+            <h4>🧪 ТЕСТУВАННЯ</h4>
+            <p>
+              Летіть у будь-який кут екрану. НЛО має врізатися в невидиму стіну
+              і зупинитися!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🧩 ЧАСТИНА 2 -->
+
+      <section id="part-2" class="theory-block tab-content">
+        <div class="theory-header">
+          <span class="star">✧</span>
+          <h2>
+            Теорія:
+            <span class="accent">Зброя до бою! (Стрільба)</span>
+          </h2>
+          <span class="star">✧</span>
+        </div>
+
+        <div class="theory-content">
+          <h3 id="p2-1">Крок 4: Створюємо зірки (Стрільба)</h3>
+
+          <p>
+            Наш корабель вміє літати, але щоб захищатися, йому потрібна зброя!
+            Ми будемо стріляти зірками (⭐️).
+            <br /><br />
+            Спочатку створимо клас <code>Star</code>. На відміну від НЛО, зірка
+            має летіти в певному напрямку, тому їй потрібні дві нові
+            властивості: <code>vx</code> (швидкість по горизонталі) та
+            <code>vy</code> (швидкість по вертикалі).
+          </p>
+
+          <!-- task 2.1 -->
+          <div class="unlockable-task">
+            <h4>Завдання 2.1: Клас Зірки</h4>
+            <p>
+              Заповніть пропуски, щоб зберегти швидкості та навчити зірку
+              рухатися (додавати швидкість до своїх координат).
+            </p>
+
+            <pre><code class="nohighlight nocopy">class Star {
+  constructor(x, y, vx, vy) {
+    this.x = x;
+    this.y = y;
+    this.<span class="blank" data-answer="vx"></span> = vx;
+    this.<span class="blank" data-answer="vy"></span> = vy;
+    this.size = SETTINGS.starSize;
+    this.emoji = "⭐️";
+  }
+
+  move() {
+    this.x += this.<span class="blank" data-answer="vx"></span>;
+    this.y += this.<span class="blank" data-answer="vy"></span>;
+  }
+
+  draw(ctx) {
+    ctx.font = this.size + "px Arial";
+    ctx.fillText(this.emoji, this.x, this.y);
+  }
+
+  // Функція-помічник: чи вилетіла зірка за екран?
+  isOut = (w, h) =&gt; this.x &lt; 0 || this.x &gt; w || this.y &lt; 0 || this.y &gt; h;
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">class Star {
+  constructor(x, y, vx, vy) {
+    this.x = x;
+    this.y = y;
+    this.vx = vx;
+    this.vy = vy;
+    this.size = SETTINGS.starSize;
+    this.emoji = "⭐️";
+  }
+
+  move() {
+    this.x += this.vx;
+    this.y += this.vy;
+  }
+
+  draw(ctx) {
+    ctx.font = this.size + "px Arial";
+    ctx.fillText(this.emoji, this.x, this.y);
+  }
+
+  isOut = (w, h) =&gt; this.x &lt; 0 || this.x &gt; w || this.y &lt; 0 || this.y &gt; h;
+}</code></pre>
+            </div>
+          </div>
+
+          <hr />
+
+          <h3 id="p2-2">Крок 5: Перезарядка (Cooldown) та Постріл</h3>
+
+          <p>
+            Тепер напишемо функцію <code>shootStars(now)</code>. Вона буде
+            перевіряти, чи натиснуті СТРІЛОЧКИ на клавіатурі. <br /><br />
+            <b>Магічна формула прицілювання:</b> Щоб зірка летіла рівно (навіть
+            якщо ми стріляємо по діагоналі), ми використовуємо математичну
+            функцію <code>Math.hypot</code> для вираховування правильного
+            напрямку. <br /><br />
+            ⚠️
+            <i
+              >Зверніть увагу на змінну <code>canShoot</code>! Вона не дає нам
+              випускати 100 зірок за секунду (перезарядка).</i
+            >
+          </p>
+
+          <!-- task 2.2 -->
+          <div class="unlockable-task">
+            <h4>Завдання 2.2: Логіка Стрільби</h4>
+            <p>
+              Допишіть перевірку стрілочок та команду додавання нової зірки в
+              кінець масиву.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function shootStars(now) {
+  // Перезарядка: чи пройшло достатньо часу з минулого пострілу?
+  const canShoot = now - lastShootTime &gt; SETTINGS.shootWaitTime;
+
+  // Якщо можна стріляти
+  if (<span class="blank" data-answer="canShoot"></span>) {
+    let dx = 0;
+    let dy = 0;
+
+    if (keys.ArrowUp) dy -= 1;
+    if (keys.<span class="blank" data-answer="ArrowDown"></span>) dy += 1;
+    if (keys.<span class="blank" data-answer="ArrowLeft"></span>) dx -= 1;
+    if (keys.<span class="blank" data-answer="ArrowRight"></span>) dx += 1;
+
+    // Якщо хоч якась стрілочка натиснута
+    if (dx !== 0 || dy !== 0) {
+      const distance = Math.hypot(dx, dy);
+      const vx = (dx / distance) * SETTINGS.starSpeed;
+      const vy = (dy / distance) * SETTINGS.starSpeed;
+
+      // Створюємо нову зірку і додаємо її в масив
+      stars.<span class="blank" data-answer="push"></span>(new Star(ufo.x, ufo.y, vx, vy));
+      
+      // Оновлюємо час пострілу
+      lastShootTime = now;
+    }
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function shootStars(now) {
+  const canShoot = now - lastShootTime &gt; SETTINGS.shootWaitTime;
+
+  if (canShoot) {
+    let dx = 0;
+    let dy = 0;
+
+    if (keys.ArrowUp) dy -= 1;
+    if (keys.ArrowDown) dy += 1;
+    if (keys.ArrowLeft) dx -= 1;
+    if (keys.ArrowRight) dx += 1;
+
+    if (dx !== 0 || dy !== 0) {
+      const distance = Math.hypot(dx, dy);
+      const vx = (dx / distance) * SETTINGS.starSpeed;
+      const vy = (dy / distance) * SETTINGS.starSpeed;
+
+      stars.push(new Star(ufo.x, ufo.y, vx, vy));
+      lastShootTime = now;
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            👉 Щоб усе запрацювало, потрібно додати цю функцію в
+            <b>Головний цикл <code>play()</code></b
+            >. Окрім того, треба пройтися по списку зірок і намалювати їх.
+          </p>
+
+          <!-- task 2.3 -->
+          <div class="unlockable-task">
+            <h4>Завдання 2.3: Оновлення циклу гри</h4>
+            <p>
+              Оновіть функцію <code>play()</code>, додавши стрільбу та малювання
+              зірок.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  if (isStarted) {
+    const now = Date.now(); // Отримуємо поточний час
+
+    ufo.move(keys, width, height);
+    <span class="blank" data-answer="shootStars"></span>(now); // Запускаємо перевірку стрільби  
+    
+    // Рухаємо та малюємо кожну зірку з масиву stars
+    stars.forEach((star) =&gt; {
+      star.<span class="blank" data-answer="move"></span>();
+      star.<span class="blank" data-answer="draw"></span>(ctx);
+    });
+
+    ufo.draw(ctx);
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  if (isStarted) {
+    const now = Date.now();
+
+    ufo.move(keys, width, height);
+    shootStars(now);
+    
+    stars.forEach((star) =&gt; {
+      star.move();
+      star.draw(ctx);
+    });
+
+    ufo.draw(ctx);
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="soft-callout">
+            <h4>🧪 ТЕСТУВАННЯ</h4>
+            <p>
+              Оновіть сторінку і спробуйте натискати стрілочки (вгору, вниз,
+              вліво, вправо). З вашого НЛО мають вилітати зірки!
+              <br /><br />
+              Спробуйте змінити <code>shootWaitTime</code> у налаштуваннях
+              <code>SETTINGS</code> з 250 на 50. Що змінилося? 😎
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🧩 ЧАСТИНА 3 -->
+
+      <section id="part-3" class="theory-block tab-content">
+        <div class="theory-header">
+          <span class="star">✧</span>
+          <h2>
+            Теорія:
+            <span class="accent">Інопланетне вторгнення (Прибульці)</span>
+          </h2>
+          <span class="star">✧</span>
+        </div>
+
+        <div class="theory-content">
+          <h3 id="p3-1">Крок 6: Спавн прибульців 👾</h3>
+
+          <p>
+            Космос не може бути порожнім! Час додати ворогів. Почнемо зі
+            створення "креслення" для нашого прибульця — класу
+            <code>Alien</code>.
+          </p>
+
+          <!-- task 3.1 -->
+          <div class="unlockable-task">
+            <h4>Завдання 3.1: Клас Прибульця</h4>
+            <p>
+              Заповніть пропуски, щоб створити конструктор та навчити ворога
+              малюватися на екрані.
+            </p>
+
+            <pre><code class="nohighlight nocopy"><span class="blank" data-answer="class"></span> Alien {
+  <span class="blank" data-answer="constructor"></span>(x, y) {
+    this.x = x;
+    this.y = y;
+    this.speed = SETTINGS.alienSpeed;
+    this.size = SETTINGS.alienSize;
+    this.emoji = "👾";
+  }
+
+  draw(ctx) {
+    ctx.font = this.size + "px Arial";
+    ctx.<span class="blank" data-answer="fillText"></span>(this.emoji, this.x, this.y);
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">class Alien {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.speed = SETTINGS.alienSpeed;
+    this.size = SETTINGS.alienSize;
+    this.emoji = "👾";
+  }
+
+  draw(ctx) {
+    ctx.font = this.size + "px Arial";
+    ctx.fillText(this.emoji, this.x, this.y);
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <p>
+            Щоб гра не була нудною, вороги повинні з'являтися випадково і з
+            різних боків екрану. Для цього ми напишемо функцію
+            <code>makeAlien(now)</code>, яка створюватиме нового ворога кожні
+            кілька секунд.
+          </p>
+
+          <!-- task 3.2 -->
+          <div class="unlockable-task">
+            <h4>Завдання 3.2: Поява ворогів</h4>
+            <p>
+              Додайте прибульця у список <code>aliens</code>, якщо прийшов час
+              для його появи. Пригадайте, яка функція використовується для
+              генерації випадкових чисел.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function makeAlien(now) {
+  const isTime = now - lastAlienTime &gt; SETTINGS.alienWaitTime;
+
+  if (isTime && aliens.length &lt; SETTINGS.maxAliens) {
+    let x;
+    let y;
+
+    // Випадкова поява з різних сторін екрану
+    if (Math.<span class="blank" data-answer="random"></span>() &lt; 0.5) {
+      x = Math.<span class="blank" data-answer="random"></span>() * width;
+      y = Math.<span class="blank" data-answer="random"></span>() &lt; 0.5 ? -40 : height + 40;
+    } else {
+      x = Math.<span class="blank" data-answer="random"></span>() &lt; 0.5 ? -40 : width + 40;
+      y = Math.<span class="blank" data-answer="random"></span>() * height;
+    }
+
+    // Додаємо нового ворога в список
+    aliens.<span class="blank" data-answer="push"></span>(new Alien(x, y));
+    // Оновлюємо час на поточний (зараз)
+    lastAlienTime = <span class="blank" data-answer="now"></span>;
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function makeAlien(now) {
+  const isTime = now - lastAlienTime &gt; SETTINGS.alienWaitTime;
+
+  if (isTime && aliens.length &lt; SETTINGS.maxAliens) {
+    let x;
+    let y;
+
+    if (Math.random() &lt; 0.5) {
+      x = Math.random() * width;
+      y = Math.random() &lt; 0.5 ? -40 : height + 40;
+    } else {
+      x = Math.random() &lt; 0.5 ? -40 : width + 40;
+      y = Math.random() * height;
+    }
+
+    aliens.push(new Alien(x, y));
+    lastAlienTime = now;
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <hr />
+
+          <h3 id="p3-2">Крок 7: Розумні прибульці (ШІ)</h3>
+
+          <p>
+            Наші прибульці не повинні просто стояти на місці! Вони мають
+            полювати на НЛО. Для цього ми використаємо <b>Радар</b> —
+            математичну функцію <code>Math.atan2</code>, яка вміє ідеально
+            визначати кут до нашого корабля, щоб ворог летів рівно на нього.
+          </p>
+
+          <!-- task 3.3 -->
+          <div class="unlockable-task">
+            <h4>Завдання 3.3: Рух прибульця</h4>
+            <p>
+              Додайте цей метод всередину класу <code>Alien</code> (після
+              конструктора). Змінна <code>target</code> — це ціль, до якої
+              летить прибулець.
+            </p>
+
+            <pre><code class="nohighlight nocopy">  move(target) {
+    // Радар: шукаємо напрямок до цілі
+    const angle = Math.<span class="blank" data-answer="atan2"></span>(target.y - this.y, target.x - this.x);
+    
+    // Робимо крок у бік цілі
+    this.x += Math.cos(angle) * this.speed;
+    this.y += Math.sin(angle) * this.speed;
+  }</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">  move(target) {
+    const angle = Math.atan2(target.y - this.y, target.x - this.x);
+    this.x += Math.cos(angle) * this.speed;
+    this.y += Math.sin(angle) * this.speed;
+  }</code></pre>
+            </div>
+          </div>
+
+          <p>
+            👉 Тепер, як і у випадку із зірками, нам треба додати створення, рух
+            та малювання прибульців у наш
+            <b>Головний цикл <code>play()</code></b
+            >.
+          </p>
+
+          <!-- task 3.4 -->
+          <div class="unlockable-task">
+            <h4>Завдання 3.4: Оновлення циклу гри</h4>
+            <p>
+              Оновіть функцію <code>play()</code>. Запустіть функцію появи
+              прибульців, а потім навчіть кожного з них рухатися за НЛО.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  if (isStarted) {
+    const now = Date.now();
+
+    ufo.move(keys, width, height);
+    shootStars(now);
+    <span class="blank" data-answer="makeAlien"></span>(now); // Запускаємо появу прибульців
+
+    stars.forEach((star) =&gt; {
+      star.move();
+      star.draw(ctx);
+    });
+
+    // Рухаємо та малюємо прибульців
+    aliens.forEach((alien) =&gt; {
+      alien.move(<span class="blank" data-answer="ufo"></span>); // Передаємо НЛО як ціль для радару  
+      alien.<span class="blank" data-answer="draw"></span>(ctx);
+    });
+
+    ufo.draw(ctx);
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  if (isStarted) {
+    const now = Date.now();
+
+    ufo.move(keys, width, height);
+    shootStars(now);
+    makeAlien(now);
+
+    stars.forEach((star) =&gt; {
+      star.move();
+      star.draw(ctx);
+    });
+
+    aliens.forEach((alien) =&gt; {
+      alien.move(ufo);
+      alien.draw(ctx);
+    });
+
+    ufo.draw(ctx);
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="soft-callout">
+            <h4>🧪 ТЕСТУВАННЯ</h4>
+            <p>
+              Політайте по екрану. Юрба прибульців має з'являтися і летіти прямо
+              за вами! 👾👾👾
+              <br /><br />
+              <i
+                >Зверніть увагу: наразі ми проходимо крізь них, і зірки їх не
+                знищують. Навчимося обробляти зіткнення у наступній частині!</i
+              >
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- 🧩 ЧАСТИНА 4 -->
+
+      <section id="part-4" class="theory-block tab-content">
+        <div class="theory-header">
+          <span class="star">✦</span>
+          <h2>
+            Теорія:
+            <span class="accent">Зіткнення та Інтерфейс</span>
+          </h2>
+          <span class="star">✦</span>
+        </div>
+
+        <div class="theory-content">
+          <h3 id="p4-1">Крок 8: Математика зіткнень 💥</h3>
+
+          <p>
+            Зараз наші об'єкти проходять один крізь одного. Щоб додати
+            зіткнення, нам треба вміти вимірювати відстань між ними.
+            <br /><br />
+            <b>Правило:</b>
+            <i
+              >"Якщо відстань між центрами двох кружечків менша за суму їхніх
+              радіусів (половину розміру) — БУМ! Вони зіткнулися."</i
+            >
+          </p>
+
+          <!-- task 4.1 -->
+          <div class="unlockable-task">
+            <h4>Завдання 4.1: Функція isHit</h4>
+            <p>
+              Додайте математичну функцію для перевірки зіткнень. Ми знову
+              використаємо <code>Math.hypot</code> для вимірювання відстані.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function isHit(obj1, obj2) {
+  // Вимірюємо відстань
+  const distance = Math.<span class="blank" data-answer="hypot"></span>(obj1.x - obj2.x, obj1.y - obj2.y);
+  
+  // Чи менша відстань за половину їхніх розмірів?
+  return distance &lt; obj1.<span class="blank" data-answer="size"></span> / 2 + obj2.<span class="blank" data-answer="size"></span> / 2;
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function isHit(obj1, obj2) {
+  const distance = Math.hypot(obj1.x - obj2.x, obj1.y - obj2.y);
+  return distance < obj1.size / 2 + obj2.size / 2;
+}</code></pre>
+            </div>
+          </div>
+
+          <hr />
+
+          <h3 id="p4-2">Крок 9: Обробка зіткнень (updateAll)</h3>
+
+          <p>
+            Ми створимо нову велику функцію <code>updateAll()</code>, яка буде
+            відповідати за прибирання сміття (видалення зірок, що вилетіли за
+            екран) та перевірку, чи хтось у когось влучив. <br /><i
+              >Щоб видалити елемент зі списку, програмісти використовують слово
+              <code>splice</code>.</i
+            >
+          </p>
+
+          <!-- task 4.2 -->
+          <div class="unlockable-task">
+            <h4>Завдання 4.2: Хто кого збив?</h4>
+            <p>
+              Заповніть пропуски: зробіть так, щоб
+              <span class="accent">гра закінчувалася (gameOver)</span>, коли
+              прибулець торкається НЛО, і щоб
+              <span class="accent">рахунок (score) збільшувався</span>, коли
+              зірка влучає в прибульця.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function updateAll() {
+  for (let i = stars.length - 1; i &gt;= 0; i--) {
+    let star = stars[i];
+    star.move();
+    // Видаляємо зірки, які вилетіли за екран
+    if (star.isOut(width, height)) stars.<span class="blank" data-answer="splice"></span>(i, 1);
+  }
+
+  for (let i = aliens.length - 1; i &gt;= 0; i--) {
+    let alien = aliens[i];
+    alien.move(ufo);
+
+    // Перевірка: Прибулець зловив НЛО! Гру завершено!
+    const ufoHitArea = { x: ufo.x, y: ufo.y, size: ufo.hitArea };
+    if (isHit(ufoHitArea, alien)) {
+      <span class="blank" data-answer="gameOver"></span> = true;
+      break;
+    }
+
+    // Перевірка: Зірка влучила в прибульця!
+    for (let j = stars.length - 1; j &gt;= 0; j--) {
+      let star = stars[j];
+
+      if (isHit(alien, star)) {
+        aliens.<span class="blank" data-answer="splice"></span>(i, 1); // Видаляємо ворога
+        stars.<span class="blank" data-answer="splice"></span>(j, 1);  // Видаляємо зірку
+        <span class="blank" data-answer="score"></span> += 10;       // Додаємо 10 балів!
+        break;
+      }
+    }
+  }
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function updateAll() {
+  for (let i = stars.length - 1; i >= 0; i--) {
+    let star = stars[i];
+    star.move();
+
+    if (star.isOut(width, height)) stars.splice(i, 1);
+  }
+
+  for (let i = aliens.length - 1; i >= 0; i--) {
+    let alien = aliens[i];
+    alien.move(ufo);
+
+    const ufoHitArea = { x: ufo.x, y: ufo.y, size: ufo.hitArea };
+    if (isHit(ufoHitArea, alien)) {
+      gameOver = true;
+      break;
+    }
+
+    for (let j = stars.length - 1; j >= 0; j--) {
+      let star = stars[j];
+
+      if (isHit(alien, star)) {
+        aliens.splice(i, 1);
+        stars.splice(j, 1);
+        score += 10;
+        break;
+      }
+    }
+  }
+}</code></pre>
+            </div>
+          </div>
+
+          <!-- <p>
+            👉 Не забудьте замінити шматочок коду у функції <code>play()</code>,
+            де ми рухали зірки та прибульців (<code>stars.forEach..., aliens.forEach...</code>), на один короткий виклик
+            <code>updateAll()</code>!
+          </p> -->
+
+          <hr />
+
+          <h3 id="p4-3">Крок 10: Текст та Екрани (Інтерфейс)</h3>
+
+          <p>
+            Гра майже готова, але нам бракує красивого стартового меню та
+            відображення рахунку. Оскільки код малювання тексту досить довгий,
+            просто скопіюйте ці три готові функції та вставте їх у свій код у
+            розділ <b>ФУНКЦІЇ МАЛЮВАННЯ</b>:
+          </p>
+
+          <div class="code-wrapper">
+            <button class="copy-btn">Копіювати</button>
+            <pre><code class="language-javascript">function drawScore() {
+  ctx.save();
+  ctx.fillStyle = "#66fcf1";
+  ctx.textAlign = "left";
+  ctx.font = "bold 24px Arial";
+  ctx.fillText("Рахунок: " + score, 20, 40);
+  ctx.restore();
+}</code></pre>
+
+            <pre><code class="language-javascript">function drawMenu() {
+  ctx.fillStyle = "rgba(11, 12, 16, 0.8)";
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "#66fcf1";
+  ctx.font = "bold 50px Arial";
+  ctx.fillText("Space Arcade", width / 2, height / 2 - 40);
+  ctx.fillStyle = "#c5c6c7";
+  ctx.font = "20px Arial";
+  ctx.fillText("Натисни ПРОБІЛ, щоб почати", width / 2, height / 2 + 30);
+  ctx.fillText("WASD - рух, СТРІЛКИ - стрільба", width / 2, height / 2 + 70);
+}</code></pre>
+
+            <pre><code class="language-javascript">function drawEnd() {
+  ctx.fillStyle = "rgba(11, 12, 16, 0.8)";
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "#66fcf1";
+  ctx.font = "bold 50px Arial";
+  ctx.fillText("Кінець гри!", width / 2, height / 2 - 40);
+  ctx.font = "30px Arial";
+  ctx.fillText(`Твій рахунок: ${score}`, width / 2, height / 2 + 10);
+  ctx.fillStyle = "#c5c6c7";
+  ctx.font = "20px Arial";
+  ctx.fillText("Натисни ПРОБІЛ, щоб грати знову", width / 2, height / 2 + 60);
+}</code></pre>
+          </div>
+
+          <!-- task 4.3 -->
+          <div class="unlockable-task">
+            <h4>Завдання 4.3: Останні штрихи в play()</h4>
+            <p>
+              Оновіть функцію <code>play()</code> так, щоб вона вміла показувати
+              Стартове меню та екран Кінець гри. Також викличте функцію
+              малювання рахунку в самому кінці.
+            </p>
+
+            <pre><code class="nohighlight nocopy">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  // Показуємо меню, якщо гра ще не почалася
+  if (!isStarted) {
+    <span class="blank" data-answer="drawMenu"></span>();
+    return; // Зупиняємо виконання коду далі
+  }
+
+  // Показуємо екран програшу
+  if (gameOver) {
+    <span class="blank" data-answer="drawEnd"></span>();
+    return;
+  }
+
+  const now = Date.now();
+
+  ufo.move(keys, width, height);
+  shootStars(now);
+  makeAlien(now);
+  updateAll(); // Наша нова супер-функція!
+
+  ufo.draw(ctx);
+  stars.forEach((star) =&gt; star.draw(ctx));
+  aliens.forEach((alien) =&gt; alien.draw(ctx));
+  
+  // Малюємо бали поверх усього
+  <span class="blank" data-answer="drawScore"></span>();
+}</code></pre>
+
+            <div class="locked-code-wrapper">
+              <div class="code-overlay">
+                <div class="lock-icon">🔒</div>
+                <p>Правильно заповніть всі пропуски, щоб розблокувати код</p>
+              </div>
+
+              <pre><code class="language-javascript">function play() {
+  requestAnimationFrame(play);
+  ctx.clearRect(0, 0, width, height);
+
+  if (!isStarted) {
+    drawMenu();
+    return;
+  }
+
+  if (gameOver) {
+    drawEnd();
+    return;
+  }
+
+  const now = Date.now();
+
+  ufo.move(keys, width, height);
+  shootStars(now);
+  makeAlien(now);
+  updateAll();
+
+  ufo.draw(ctx);
+  stars.forEach((star) =&gt; star.draw(ctx));
+  aliens.forEach((alien) =&gt; alien.draw(ctx));
+  drawScore();
+}</code></pre>
+            </div>
+          </div>
+
+          <div class="soft-callout">
+            <h4>❗️ УВАГА: Важливий крок!</h4>
+            <p>
+              Оскільки тепер у нас є стартове меню, гра не повинна запускатися
+              автоматично. Спустіться в самий низ вашого файлу
+              <code>script.js</code> і <b>видаліть або закоментуйте</b> рядок
+              <code>startGame();</code> перед <code>play();</code>.
+            </p>
+            <pre><code class="language-javascript">// startGame(); &lt;-- Закоментуйте це!
+play(); // Залишаємо тільки це</code></pre>
+          </div>
+
+          <hr />
+
+          <h3 id="p4-4">Крок 11: Хакерство та Модинг 👨‍💻👩‍💻</h3>
+
+          <p>
+            Вітаємо, ви створили повноцінну гру! Тепер настав час зробити її
+            унікальною. Підніміться на самий початок вашого файлу до об'єкта
+            <code>SETTINGS</code> та класів. Змініть гру на свій смак. Наприклад:
+          </p>
+
+          <ol>
+            <li>
+              <b>Змініть персонажів:</b> Знайдіть рядки
+              <code>this.emoji = "...";</code> і, наприклад, замініть НЛО на
+              мавпочку 🐒, прибульців на динозаврів 🦖, а зірки на банани 🍌!
+            </li>
+            <li>
+              <b>Зробіть супер-швидкість:</b> Збільште <code>ufoSpeed</code> до
+              10.
+            </li>
+            <li>
+              <b>Складний режим:</b> Зменше <code>alienWaitTime</code> рівним
+              200, щоб нові прибульці з'являлися швидше!
+            </li>
+            <li>
+              <b>Розміри:</b> Знайдіть у <code>SETTINGS</code> параметри
+              <code>ufoSize</code>, <code>starSize</code> та
+              <code>alienSize</code> та спробуйте змінити розміри обʼєктів, щоб
+              грати стало простіше або важче.
+            </li>
+            <li><b>Стилі:</b> Оберіть власні кольори для гри відредагуйте CSS-код.</li>
+          </ol>
+
+           <div class="video-wrapper zoomable">
+            <video controls>
+              <source src="./media/monkey.mov" type="video/mp4" />
+              Ваший браузер не підтримує відео.
+            </video>
+          </div>
+
+          <hr>
+
+          <p style="text-align: center; font-size: 24px; margin-top: 30px">
+            🎉 <b>Вітаю із завершенням курсу!</b> 🎉
+          </p>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <p>© 2026 WebUniverse — Усі права захищені.</p>
+    </footer>
+
+    <!-- Кнопка для повернення на початок сторінки -->
+    <button
+      id="scrollToTopBtn"
+      class="scroll-to-top"
+      aria-label="Повернутися нагору"
+    >
+      🛸
+    </button>
+  </body>
+</html>
