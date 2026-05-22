@@ -2354,6 +2354,7 @@ code.long-code .hljs-ln td.hljs-ln-code {
 }
 
 .inline-sizer input {
+  line-height: 1.5;
   width: 100%;
   border: none;
   border-bottom: 2px dashed var(--accent);
