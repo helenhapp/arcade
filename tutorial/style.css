@@ -26,8 +26,9 @@
   --link-bg: rgba(0, 0, 0, 0.05);
   --soft-callout: #f8f9fa;
   /* --soft-callout: #e9ecef; */
-  /* --bar-bg: #ffffff; */
-  --bar-bg: #f8f9fa;
+  --bar-bg: #ffffff;
+  /* --bar-bg: #f8f9fa; */
+  /* --bar-bg: #eae6ed; */
 
   /* Текст і посилання */
   --text-main: #1a1a1a;
